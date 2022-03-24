@@ -5,9 +5,14 @@ import 'dotenv/config';
 import cookieParser from 'cookie-parser';
 
 import authRoutes from './routes/auth';
+import postRoutes from './routes/posts';
+import subRoutes from './routes/subs';
+
 import { trim } from './middlewares/trim';
 
 const app = express();
+const PORT = process.env.PORT;
+
 app.use(express.json());
 app.use(morgan('dev'));
 app.use(trim);
@@ -18,9 +23,11 @@ app.get('/', (_, res) => {
 });
 
 app.use('/api/auth', authRoutes);
+app.use('/api/posts', postRoutes);
+app.use('/api/subs', subRoutes);
 
-app.listen(5000, async () => {
-	console.log('Server is up and running at http://localhost:5000');
+app.listen(PORT, async () => {
+	console.log(`Server is up and running at http://localhost:${PORT}`);
 
 	try {
 		await AppDataSource.initialize();
