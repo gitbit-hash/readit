@@ -7,6 +7,7 @@ import cookieParser from 'cookie-parser';
 import authRoutes from './routes/auth';
 import postRoutes from './routes/posts';
 import subRoutes from './routes/subs';
+import commentRoutes from './routes/comments';
 
 import { trim } from './middlewares/trim';
 
@@ -25,6 +26,7 @@ app.get('/', (_, res) => {
 app.use('/api/auth', authRoutes);
 app.use('/api/posts', postRoutes);
 app.use('/api/subs', subRoutes);
+app.use('/api/posts', commentRoutes);
 
 app.listen(PORT, async () => {
 	console.log(`Server is up and running at http://localhost:${PORT}`);
