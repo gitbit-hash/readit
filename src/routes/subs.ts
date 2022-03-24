@@ -36,7 +36,7 @@ const createSub = async (req: Request, res: Response) => {
 		return res.json(sub);
 	} catch (error) {
 		console.log(error);
-		res.status(500).json({ error: 'Somethong went wrong!' });
+		return res.status(500).json({ error: 'Somethong went wrong!' });
 	}
 };
 

@@ -15,7 +15,7 @@ export default abstract class Entity extends BaseEntity {
 	createdAt: Date;
 
 	@UpdateDateColumn()
-	updateddAt: Date;
+	updatedAt: Date;
 
 	toJSON() {
 		// return user after transformation excluding id and password

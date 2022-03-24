@@ -6,7 +6,6 @@ import {
 	ManyToOne,
 	OneToMany,
 } from 'typeorm';
-import { makeId, string_to_slug } from '../utils/helpers';
 
 import Entity from './Entity';
 import { Post } from './Post';

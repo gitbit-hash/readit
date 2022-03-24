@@ -8,6 +8,20 @@
 		"emitDecoratorMetadata": true,
 		"experimentalDecorators": true,
 		"sourceMap": true,
-		"esModuleInterop": true
+		"esModuleInterop": true,
+		//Strict stuff
+		//"strict": true,
+		"noImplicitAny": true,
+		"strictFunctionTypes": true,
+		"strictBindCallApply": true,
+		//"strictPropertyInitialization": true,
+		"noImplicitThis": true,
+		//Extra
+		"alwaysStrict": true,
+		"noUnusedLocals": true,
+		"noUnusedParameters": true,
+		"noImplicitReturns": true,
+		"noFallthroughCasesInSwitch": true,
+		"resolveJsonModule": true
 	}
 }
