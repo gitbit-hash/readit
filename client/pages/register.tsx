@@ -8,7 +8,7 @@ export default function Register() {
 				<title>Register</title>
 				<meta name='description' content='Register page' />
 			</Head>
-			<div className="w-40 h-screen bg-cover bg-center bg-[url('/images/tiles.jpg')]"></div>
+			<div className="w-36 h-screen bg-cover bg-center bg-[url('/images/tiles.jpg')]"></div>
 			<div className='flex flex-col justify-center pl-6'>
 				<div className='w-72'>
 					<h1 className='mb-2 text-lg '>Sign Up</h1>
@@ -55,7 +55,7 @@ export default function Register() {
 					<small>
 						Already a Readitor
 						<Link href='/login'>
-							<a className='ml-1 text-blue-500 uppercase'>Sign In</a>
+							<a className='ml-1 text-blue-600 uppercase'>Sign In</a>
 						</Link>
 					</small>
 				</div>
