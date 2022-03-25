@@ -30,21 +30,21 @@ export default function Register() {
 						<div className='mb-2'>
 							<input
 								type='email'
-								className='w-full px-3 py-2 bg-gray-100 border border-gray-300 rounded outline-none placeholder:uppercase'
+								className='w-full px-3 py-2 transition border border-gray-300 rounded outline-none bg-gray-50 placeholder:uppercase focus:bg-white hover:bg-white 200'
 								placeholder='Email'
 							/>
 						</div>
 						<div className='mb-2'>
 							<input
 								type='text'
-								className='w-full px-3 py-2 bg-gray-100 border border-gray-300 rounded outline-none placeholder:uppercase'
+								className='w-full px-3 py-2 transition border border-gray-300 rounded outline-none bg-gray-50 placeholder:uppercase focus:bg-white hover:bg-white 200'
 								placeholder='Username'
 							/>
 						</div>
 						<div className='mb-2'>
 							<input
 								type='password'
-								className='w-full px-3 py-2 bg-gray-100 border border-gray-300 rounded outline-none placeholder:uppercase'
+								className='w-full px-3 py-2 transition border border-gray-300 rounded outline-none bg-gray-50 placeholder:uppercase focus:bg-white hover:bg-white 200'
 								placeholder='Password'
 							/>
 						</div>

@@ -1,3 +1,5 @@
+const defaultTheme = require('tailwindcss/defaultTheme');
+
 module.exports = {
 	content: [
 		'./pages/**/*.{js,ts,jsx,tsx}',
@@ -5,6 +7,9 @@ module.exports = {
 	],
 	theme: {
 		extend: {
+			fontFamily: {
+				body: ['"IBM Plex Sans"', ...defaultTheme.fontFamily.sans],
+			},
 			colors: {
 				blue: {
 					100: '#d8e6fd',
