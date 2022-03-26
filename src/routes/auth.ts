@@ -12,16 +12,9 @@ const register = async (req: Request, res: Response) => {
 	const { username, email, password } = req.body;
 
 	try {
-		// Validate data
-		let errors: any = [];
+		let errors: any = {};
 
-		// Create a user
-		const user = new User({ username, email, password });
-
-		errors = await validate(user);
-		if (errors.length > 0) {
-			return res.status(400).json({ errors });
-		}
+		// Checking if username or email either exists
 		const existingUsername = await AppDataSource.getRepository(User).findOneBy({
 			username,
 		});
@@ -29,13 +22,31 @@ const register = async (req: Request, res: Response) => {
 			email,
 		});
 
-		if (existingUsername) errors.push('Username is already taken');
-		if (existingEmail) errors.push('Email is already taken');
+		if (existingUsername) errors.username = 'Username is already taken';
+		if (existingEmail) errors.email = 'Email is already taken';
 
-		if (errors.length > 0) {
+		if (Object.keys(errors).length > 0) {
 			return res.status(400).json({ errors });
 		}
 
+		// Create a user
+		const user = new User({ username, email, password });
+
+		// Validate provided data
+		errors = await validate(user);
+
+		const mappedErrors = errors.reduce((acc: any, curr: any) => {
+			if (curr['property']) {
+				acc[curr['property']] = Object.entries(curr['constraints'])[0][1];
+				return acc;
+			}
+		}, {});
+
+		if (mappedErrors.length > 0) {
+			return res.status(400).json(mappedErrors);
+		}
+
+		// Save user in database
 		await user.save();
 
 		// Return the user

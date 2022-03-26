@@ -21,16 +21,17 @@ export class User extends Entity {
 
 	@Column({ unique: true })
 	@Index()
-	@Length(3, 255, { message: 'Username must be at least 3 characters long' })
+	@Length(3, 255, { message: 'Must be at least 3 characters long' })
 	username: string;
 
 	@Column({ unique: true })
 	@Index()
-	@IsEmail()
+	@IsEmail(undefined, { message: 'Must be a valid email address' })
+	@Length(1, 255, { message: 'Email is empty' })
 	email: string;
 
 	@Column()
-	@Length(6, 255, { message: 'Password must be at least 6 characters long' })
+	@Length(6, 255, { message: 'Must be at least 6 characters long' })
 	@Exclude()
 	password: string;
 
