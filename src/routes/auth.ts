@@ -35,14 +35,14 @@ const register = async (req: Request, res: Response) => {
 		// Validate provided data
 		errors = await validate(user);
 
-		const mappedErrors = errors.reduce((acc: any, curr: any) => {
-			if (curr['property']) {
-				acc[curr['property']] = Object.entries(curr['constraints'])[0][1];
-				return acc;
-			}
-		}, {});
+		if (errors.length > 0) {
+			const mappedErrors = errors.reduce((acc: any, curr: any) => {
+				if (curr['property']) {
+					acc[curr['property']] = Object.entries(curr['constraints'])[0][1];
+					return acc;
+				}
+			}, {});
 
-		if (mappedErrors.length > 0) {
 			return res.status(400).json(mappedErrors);
 		}
 
