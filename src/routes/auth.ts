@@ -70,12 +70,12 @@ const login = async (req: Request, res: Response) => {
 			username,
 		});
 
-		if (!user) return res.status(404).json({ error: 'Invalid credintials' });
+		if (!user) return res.status(404).json({ username: 'Invalid credintials' });
 
 		const passwordMatched = await compare(password, user.password);
 
 		if (!passwordMatched) {
-			return res.status(401).json({ error: 'Invalid credintials' });
+			return res.status(401).json({ password: 'Invalid credintials' });
 		}
 
 		const token = jwt.sign({ username }, process.env.JWT_SECRET);
