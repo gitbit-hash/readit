@@ -26,7 +26,7 @@ const register = async (req: Request, res: Response) => {
 		if (existingEmail) errors.email = 'Email is already taken';
 
 		if (Object.keys(errors).length > 0) {
-			return res.status(400).json({ errors });
+			return res.status(400).json(errors);
 		}
 
 		// Create a user

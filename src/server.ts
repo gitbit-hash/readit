@@ -3,6 +3,7 @@ import express from 'express';
 import morgan from 'morgan';
 import 'dotenv/config';
 import cookieParser from 'cookie-parser';
+import cors from 'cors';
 
 import authRoutes from './routes/auth';
 import postRoutes from './routes/posts';
@@ -18,10 +19,7 @@ app.use(express.json());
 app.use(morgan('dev'));
 app.use(trim);
 app.use(cookieParser());
-
-app.get('/', (_, res) => {
-	res.send('Hello World');
-});
+app.use(cors());
 
 app.use('/api/auth', authRoutes);
 app.use('/api/posts', postRoutes);
