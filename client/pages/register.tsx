@@ -1,7 +1,48 @@
 import Head from 'next/head';
 import Link from 'next/link';
+import { FormEvent, useState, ChangeEvent } from 'react';
+import Axios from 'axios';
+
+import InputGroup from '../components/InputGroup';
 
 export default function Register() {
+	const [input, setInput] = useState({
+		username: '',
+		email: '',
+		password: '',
+	});
+
+	const [agreement, setAgreement] = useState(false);
+
+	const [inputErrors, setInputErrors] = useState<any>({});
+
+	const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+		const { name, value } = e.target;
+		setInput({ ...input, [name]: value });
+	};
+
+	const handleAgreementChange = (e: ChangeEvent<HTMLInputElement>) => {
+		const { checked } = e.target;
+		setAgreement(checked);
+	};
+
+	const { username, email, password } = input;
+
+	const handleSubmit = async (e: FormEvent) => {
+		e.preventDefault();
+
+		try {
+			await Axios.post('/auth/register', {
+				username,
+				email,
+				password,
+			});
+			setInputErrors({});
+		} catch (error) {
+			setInputErrors(error.response.data);
+		}
+	};
+
 	return (
 		<div className='flex'>
 			<Head>
@@ -16,38 +57,47 @@ export default function Register() {
 						By continuing, you are agree to our User Agreement and Pricacy
 						Policy
 					</p>
-					<form>
+					<form onSubmit={handleSubmit}>
 						<div className='mb-6'>
 							<input
 								type='checkbox'
 								id='agreement'
 								className='mr-1 align-middle cursor-pointer'
+								checked={agreement}
+								onChange={handleAgreementChange}
+								name='agreement'
 							/>
 							<label htmlFor='agreement' className='text-xs cursor-pointer'>
 								I agree to get emails about cool stuff on Readit
 							</label>
 						</div>
-						<div className='mb-2'>
-							<input
-								type='email'
-								className='w-full px-3 py-2 transition border border-gray-300 rounded outline-none bg-gray-50 placeholder:uppercase focus:bg-white hover:bg-white 200'
-								placeholder='Email'
-							/>
-						</div>
-						<div className='mb-2'>
-							<input
-								type='text'
-								className='w-full px-3 py-2 transition border border-gray-300 rounded outline-none bg-gray-50 placeholder:uppercase focus:bg-white hover:bg-white 200'
-								placeholder='Username'
-							/>
-						</div>
-						<div className='mb-2'>
-							<input
-								type='password'
-								className='w-full px-3 py-2 transition border border-gray-300 rounded outline-none bg-gray-50 placeholder:uppercase focus:bg-white hover:bg-white 200'
-								placeholder='Password'
-							/>
-						</div>
+						<InputGroup
+							className='mb-2'
+							type='email'
+							placeholder='EMAIL'
+							value={email}
+							setValue={handleInputChange}
+							name='email'
+							error={inputErrors.email}
+						/>
+						<InputGroup
+							className='mb-2'
+							type='text'
+							placeholder='USErNAME'
+							value={username}
+							setValue={handleInputChange}
+							name='username'
+							error={inputErrors.username}
+						/>
+						<InputGroup
+							className='mb-2'
+							type='password'
+							placeholder='PASSWORD'
+							value={password}
+							setValue={handleInputChange}
+							name='password'
+							error={inputErrors.password}
+						/>
 						<button className='w-full py-2 mb-4 text-xs font-bold text-white uppercase bg-blue-500 border border-blue-500 rounded hover:bg-blue-400'>
 							Sign Up
 						</button>
