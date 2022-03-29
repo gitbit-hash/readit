@@ -23,6 +23,9 @@ module.exports = {
 					900: '#0c1a31',
 				},
 			},
+			spacing: {
+				160: '40rem',
+			},
 		},
 	},
 	plugins: [],
