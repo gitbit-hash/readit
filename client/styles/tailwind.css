@@ -1,3 +1,21 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer components {
+	.custom-button {
+		@apply inline-block text-xs font-bold tracking-widest text-center border rounded-full;
+	}
+	.custom-button.blue {
+		@apply text-white bg-blue-500 border-blue-500;
+	}
+	.custom-button.blue:hover {
+		@apply bg-blue-400 border-blue-300;
+	}
+	.custom-button.blue.hollow {
+		@apply text-blue-500 bg-transparent border-blue-500;
+	}
+	.custom-button.blue.hollow:hover {
+		@apply text-blue-500 border-blue-500 bg-blue-50;
+	}
+}

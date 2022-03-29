@@ -56,7 +56,7 @@ export default function Register() {
 	};
 
 	return (
-		<div className='flex'>
+		<div className='flex bg-white'>
 			<Head>
 				<title>Register</title>
 				<meta name='description' content='Register page' />
