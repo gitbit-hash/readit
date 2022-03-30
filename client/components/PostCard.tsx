@@ -11,12 +11,21 @@ interface PostCardProps {
 
 dayjs.extend(relativeTime);
 
-function PostCard({ post }) {
+function PostCard({ post }: PostCardProps) {
 	return (
 		<div key={post.identifier} className='flex mb-4 bg-white rounded'>
 			{/* Vote section */}
-			<div className='w-10 text-center bg-gray-200 rounded-l'>
-				<p>V</p>
+			<div className='w-10 text-center bg-gray-50 rounded-l py-3'>
+				{/* Up vote */}
+				<div className='w-6 mx-auto text-gray-400 rounded cursor-pointer hover:bg-gray-300 hover:text-red-500'>
+					<i className='icon-arrow-up'></i>
+				</div>
+				{/* Votes score */}
+				<p className='text-xs font-bold my-1'>48.5k</p>
+				{/* Down vote */}
+				<div className='w-6 mx-auto text-gray-400 rounded cursor-pointer hover:bg-gray-300 hover:text-blue-500'>
+					<i className='icon-arrow-down'></i>
+				</div>
 			</div>
 			{/* Post data section */}
 			<div className='w-full p-2'>
