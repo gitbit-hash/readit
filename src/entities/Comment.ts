@@ -5,6 +5,7 @@ import {
 	Index,
 	JoinColumn,
 	ManyToOne,
+	OneToMany,
 } from 'typeorm';
 
 import Entity from './Entity';
@@ -12,6 +13,8 @@ import { Post } from './Post';
 import { User } from './User';
 
 import { makeId } from '../utils/helpers';
+import { Vote } from './Vote';
+import { Exclude } from 'class-transformer';
 
 @TOEntity('comments')
 export class Comment extends Entity {
@@ -35,6 +38,18 @@ export class Comment extends Entity {
 
 	@ManyToOne(() => Post, (post) => post.comments, { nullable: false })
 	post: Post;
+
+	@Exclude()
+	@OneToMany(() => Vote, (vote) => vote.comment)
+	votes: Vote[];
+
+	protected userVote: number;
+	setUserVote(user: User) {
+		const idx = this.votes?.findIndex(
+			(vote) => vote.username === user.username
+		);
+		this.userVote = idx > -1 ? this.votes[idx].value : 0;
+	}
 
 	@BeforeInsert()
 	makeIdAndSlug() {

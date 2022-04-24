@@ -18,7 +18,6 @@ export default abstract class Entity extends BaseEntity {
 	updatedAt: Date;
 
 	toJSON() {
-		// return user after transformation excluding id and password
 		return instanceToPlain(this);
 	}
 }

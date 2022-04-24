@@ -7,13 +7,14 @@ import {
 	ManyToOne,
 	OneToMany,
 } from 'typeorm';
-import { Expose } from 'class-transformer';
+import { Exclude, Expose } from 'class-transformer';
 
 import { makeId, string_to_slug } from '../utils/helpers';
 import { Comment } from './Comment';
 import Entity from './Entity';
 import { Sub } from './Sub';
 import { User } from './User';
+import { Vote } from './Vote';
 
 @TOEntity('posts')
 export class Post extends Entity {
@@ -53,8 +54,28 @@ export class Post extends Entity {
 	@OneToMany(() => Comment, (comment) => comment.post)
 	comments: Comment[];
 
+	@Exclude()
+	@OneToMany(() => Vote, (vote) => vote.post)
+	votes: Vote[];
+
 	@Expose() get url(): string {
 		return `/r/${this.subName}/${this.identifier}/${this.slug}`;
+	}
+
+	@Expose() get commentCount(): number {
+		return this.comments?.length;
+	}
+
+	@Expose() get voteScore(): number {
+		return this.votes?.reduce((acc, curr) => acc + (curr.value || 0), 0);
+	}
+
+	protected userVote: number;
+	setUserVote(user: User) {
+		const idx = this.votes?.findIndex(
+			(vote) => vote.username === user.username
+		);
+		this.userVote = idx > -1 ? this.votes[idx].value : 0;
 	}
 
 	@BeforeInsert()
