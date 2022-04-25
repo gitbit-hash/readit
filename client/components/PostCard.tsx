@@ -4,6 +4,7 @@ import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 
 import { Post } from '../types';
+import Axios from 'axios';
 
 interface PostCardProps {
 	post: Post;
@@ -12,19 +13,47 @@ interface PostCardProps {
 dayjs.extend(relativeTime);
 
 function PostCard({ post }: PostCardProps) {
+	const vote = async (value) => {
+		try {
+			const res = await Axios.post('/misc/vote', {
+				identifier: post.identifier,
+				slug: post.slug,
+				value,
+			});
+
+			console.log(res.data);
+		} catch (error) {
+			console.log(error);
+		}
+	};
+
 	return (
 		<div key={post.identifier} className='flex mb-4 bg-white rounded'>
 			{/* Vote section */}
-			<div className='w-10 text-center bg-gray-50 rounded-l py-3'>
+			<div className='w-10 py-3 text-center rounded-l bg-gray-50'>
 				{/* Up vote */}
-				<div className='w-6 mx-auto text-gray-400 rounded cursor-pointer hover:bg-gray-300 hover:text-red-500'>
-					<i className='icon-arrow-up'></i>
+				<div
+					className='w-6 mx-auto text-gray-400 rounded cursor-pointer hover:bg-gray-300 hover:text-red-500'
+					onClick={() => vote(1)}
+				>
+					<i
+						className={`icon-arrow-up ${
+							post.userVote === 1 && 'text-red-500 '
+						}`}
+					></i>
 				</div>
 				{/* Votes score */}
-				<p className='text-xs font-bold my-1'>48.5k</p>
+				<p className='my-1 text-xs font-bold'>{post.voteScore}</p>
 				{/* Down vote */}
-				<div className='w-6 mx-auto text-gray-400 rounded cursor-pointer hover:bg-gray-300 hover:text-blue-500'>
-					<i className='icon-arrow-down'></i>
+				<div
+					className='w-6 mx-auto text-gray-400 rounded cursor-pointer hover:bg-gray-300 hover:text-blue-500'
+					onClick={() => vote(-1)}
+				>
+					<i
+						className={`icon-arrow-down ${
+							post.userVote === -1 && 'text-blue-500 '
+						}`}
+					></i>
 				</div>
 			</div>
 			{/* Post data section */}
@@ -63,7 +92,7 @@ function PostCard({ post }: PostCardProps) {
 						<a>
 							<div className='px-1 py-1 mr-1 text-xs text-gray-500 rounded cursor-pointer hover:bg-gray-300'>
 								<i className='mr-1 fa-solid fa-xs fa-message'></i>
-								<span className='font-bold'>20 Comments</span>
+								<span className='text-xs font-bold'>{post.commentCount}</span>
 							</div>
 						</a>
 					</Link>
