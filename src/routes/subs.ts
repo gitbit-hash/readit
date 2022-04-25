@@ -1,10 +1,13 @@
 import { Request, Response, Router } from 'express';
+import { isEmpty } from 'class-validator';
 
 import { User } from '../entities/User';
 import { Sub } from '../entities/Sub';
-import { auth } from '../middlewares/auth';
-import { isEmpty } from 'class-validator';
+
 import { AppDataSource } from '../data-source';
+
+import { auth } from '../middlewares/auth';
+import { user } from '../middlewares/user';
 
 const createSub = async (req: Request, res: Response) => {
 	const { name, title, description } = req.body;
@@ -41,6 +44,6 @@ const createSub = async (req: Request, res: Response) => {
 
 const router = Router();
 
-router.post('/', auth, createSub);
+router.post('/', user, auth, createSub);
 
 export default router;

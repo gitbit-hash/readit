@@ -4,6 +4,7 @@ import { Post } from '../entities/Post';
 import { Sub } from '../entities/Sub';
 
 import { auth } from '../middlewares/auth';
+import { user } from '../middlewares/user';
 
 const createPost = async (req: Request, res: Response) => {
 	const { title, body, sub } = req.body;
@@ -39,7 +40,12 @@ const getAllPosts = async (_: Request, res: Response) => {
 	try {
 		const posts = await AppDataSource.getRepository(Post).find({
 			order: { createdAt: 'DESC' },
+			relations: ['comments', 'votes', 'sub'],
 		});
+
+		if (res.locals.user) {
+			posts.forEach((post) => post.setUserVote(res.locals.user));
+		}
 
 		return res.json(posts);
 	} catch (error) {
@@ -68,8 +74,8 @@ const getPost = async (req: Request, res: Response) => {
 
 const router = Router();
 
-router.post('/', auth, createPost);
-router.get('/', getAllPosts);
+router.post('/', user, auth, createPost);
+router.get('/', user, getAllPosts);
 router.get('/:identifier/:slug', getPost);
 
 export default router;
