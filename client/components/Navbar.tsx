@@ -1,8 +1,23 @@
+import Axios from 'axios';
 import Link from 'next/link';
+
+import { useAuthState, useAuthDispatch } from '../context/auth';
 
 import RedditLogo from '../public/images/reddit-logo.svg';
 
 const Navbar: React.FC = () => {
+	const { authenticated, loading } = useAuthState();
+	const dispatch = useAuthDispatch();
+
+	const logout = async () => {
+		Axios.get('/auth/logout')
+			.then(() => {
+				dispatch({ type: 'LOGOUT' });
+				window.location.reload();
+			})
+			.catch((error) => console.log(error));
+	};
+
 	return (
 		<div className='fixed inset-x-0 top-0 z-10 flex items-center justify-center h-12 px-5 bg-white'>
 			{/* Logo and title */}
@@ -29,18 +44,32 @@ const Navbar: React.FC = () => {
 			</div>
 			{/* Auth buttons */}
 			<div className='flex'>
+				{!loading &&
+					(authenticated ? (
+						<button
+							className='w-32 py-1 mr-3 leading-6 hollow blue custom-button'
+							onClick={logout}
+						>
+							Log Out
+						</button>
+					) : (
+						<>
+							<Link href='/login'>
+								<a className='w-32 py-1 mr-3 leading-6 hollow blue custom-button'>
+									Log In
+								</a>
+							</Link>
+							<Link href='/register'>
+								<a className='w-32 py-1 leading-6 blue custom-button'>
+									Sign Up
+								</a>
+							</Link>
+						</>
+					))}
 				<Link href='/'>
 					<a className='flex items-center mx-2 bg-gray-100 rounded-full hover:bg-gray-200'>
 						<i className='ml-3 mr-3 text-gray-600 fa-solid fa-bullhorn' />
 					</a>
-				</Link>
-				<Link href='/login'>
-					<a className='w-32 py-1 mr-3 leading-6 hollow blue custom-button'>
-						Log In
-					</a>
-				</Link>
-				<Link href='/login'>
-					<a className='w-32 py-1 leading-6 blue custom-button'>Sign Up</a>
 				</Link>
 			</div>
 		</div>

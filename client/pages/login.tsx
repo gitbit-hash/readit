@@ -1,10 +1,14 @@
+import { FormEvent, useState, ChangeEvent } from 'react';
+
 import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { FormEvent, useState, ChangeEvent } from 'react';
+
 import Axios from 'axios';
 
 import InputGroup from '../components/InputGroup';
+
+import { useAuthDispatch, useAuthState } from '../context/auth';
 
 export default function Register() {
 	const [input, setInput] = useState({
@@ -14,7 +18,12 @@ export default function Register() {
 
 	const [inputErrors, setInputErrors] = useState<any>({});
 
+	const dispatch = useAuthDispatch();
+	const { authenticated } = useAuthState();
+
 	const router = useRouter();
+
+	if (authenticated) router.push('/');
 
 	const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
 		const { name, value } = e.target;
@@ -27,10 +36,13 @@ export default function Register() {
 		e.preventDefault();
 
 		try {
-			await Axios.post('/auth/login', {
+			const res = await Axios.post('/auth/login', {
 				username,
 				password,
 			});
+
+			dispatch({ type: 'LOGIN', payload: res.data });
+
 			setInputErrors({});
 			router.push('/');
 		} catch (error) {

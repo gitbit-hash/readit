@@ -1,8 +1,11 @@
 import Head from 'next/head';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
 import { FormEvent, useState, ChangeEvent } from 'react';
+import { useRouter } from 'next/router';
+
 import Axios from 'axios';
+
+import { useAuthState } from '../context/auth';
 
 import InputGroup from '../components/InputGroup';
 
@@ -17,7 +20,10 @@ export default function Register() {
 
 	const [inputErrors, setInputErrors] = useState<any>({});
 
+	const { authenticated } = useAuthState();
+
 	const router = useRouter();
+	if (authenticated) router.push('/');
 
 	const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
 		const { name, value } = e.target;

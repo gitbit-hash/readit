@@ -1,8 +1,12 @@
 import type { AppProps } from 'next/app';
-import Axios from 'axios';
 import { useRouter } from 'next/router';
 
+import Axios from 'axios';
+
 import Navbar from '../components/Navbar';
+
+import { AuthProvider } from '../context/auth';
+
 import '../styles/tailwind.css';
 import '../styles/icons.css';
 
@@ -15,9 +19,9 @@ export default function MyApp({ Component, pageProps }: AppProps) {
 	const isAuthRoute = authRoutes.includes(pathname);
 
 	return (
-		<>
+		<AuthProvider>
 			{!isAuthRoute && <Navbar />}
 			<Component {...pageProps} />;
-		</>
+		</AuthProvider>
 	);
 }
