@@ -12,6 +12,7 @@
 		"@types/jsonwebtoken": "^8.5.8",
 		"@types/morgan": "^1.9.3",
 		"@types/node": "^16.11.10",
+		"concurrently": "^7.1.0",
 		"morgan": "^1.10.0",
 		"nodemon": "^2.0.15",
 		"ts-node": "^10.7.0",
@@ -34,6 +35,8 @@
 	"scripts": {
 		"start": "ts-node src/server.ts",
 		"typeorm": "typeorm-ts-node-commonjs",
-		"dev": "nodemon --exec ts-node src/server.ts"
+		"server": "nodemon --exec ts-node src/server.ts",
+		"client": "cd client && npm run dev",
+		"dev": "concurrently \"npm run server\" \"npm run client\" --names server,client"
 	}
 }
