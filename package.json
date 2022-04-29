@@ -30,13 +30,16 @@
 		"jsonwebtoken": "^8.5.1",
 		"pg": "^8.4.0",
 		"reflect-metadata": "^0.1.13",
-		"typeorm": "0.3.3"
+		"typeorm": "0.3.3",
+		"typeorm-extension": "^2.1.0"
 	},
 	"scripts": {
 		"start": "ts-node src/server.ts",
-		"typeorm": "typeorm-ts-node-commonjs",
 		"server": "nodemon --exec ts-node src/server.ts",
 		"client": "cd client && npm run dev",
-		"dev": "concurrently \"npm run server\" \"npm run client\" --names server,client"
+		"dev": "concurrently \"npm run server\" \"npm run client\" --names server,client",
+		"typeorm": "typeorm-ts-node-esm -d ./src/data-source.ts",
+		"migration:generate": "npm run typeorm -- migration:generate ./src/migrations/my-migration-name",
+		"seed": "ts-node ./node_modules/typeorm-extension/dist/cli/index.js seed"
 	}
 }

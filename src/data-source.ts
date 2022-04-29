@@ -1,16 +1,19 @@
 import 'reflect-metadata';
-import { DataSource } from 'typeorm';
+import { DataSource, DataSourceOptions } from 'typeorm';
+import { SeederOptions } from 'typeorm-extension';
 
-export const AppDataSource = new DataSource({
+const options: DataSourceOptions & SeederOptions = {
 	type: 'postgres',
 	host: 'localhost',
 	port: 5432,
 	username: 'MazeRunner',
 	password: 'root',
 	database: 'readit',
-	synchronize: true,
-	logging: false,
-	entities: ['src/entities/**/*.ts'],
-	migrations: ['src/migrations/**/*.ts'],
-	subscribers: ['src/subscribers/**/*.ts'],
-});
+	synchronize: false,
+	logging: true,
+	entities: ['src/entities/**/*{.ts,.js}'],
+	migrations: ['src/migrations/**/*{.ts,.js}'],
+	subscribers: ['src/subscribers/**/*{.ts,.js}'],
+	seeds: ['src/seeds/**/*{.ts,.js}'],
+};
+export const AppDataSource = new DataSource(options);
