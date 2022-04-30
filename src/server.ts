@@ -27,6 +27,7 @@ app.use(
 		optionsSuccessStatus: 200,
 	})
 );
+app.use(express.static('puplic'));
 
 app.use('/api/auth', authRoutes);
 app.use('/api/posts', postRoutes);
