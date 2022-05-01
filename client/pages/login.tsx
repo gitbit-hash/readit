@@ -44,7 +44,7 @@ export default function Register() {
 			dispatch({ type: 'LOGIN', payload: res.data });
 
 			setInputErrors({});
-			router.push('/');
+			router.back();
 		} catch (error) {
 			console.log(error.response.data.error);
 			setInputErrors(error.response.data);

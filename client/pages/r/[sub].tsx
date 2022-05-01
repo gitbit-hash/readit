@@ -1,13 +1,15 @@
 import { ChangeEvent, useEffect, useRef, useState } from 'react';
+import Axios from 'axios';
 import Head from 'next/head';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import useSWR from 'swr';
 
 import PostCard from '../../components/PostCard';
+import Sidebar from '../../components/Sidebar';
+
 import { Sub } from '../../types';
 import { useAuthState } from '../../context/auth';
-import Axios from 'axios';
 
 export default function SubPage() {
 	// Local state
@@ -128,6 +130,7 @@ export default function SubPage() {
 					{/* Posts and sidebar */}
 					<div className='container flex pt-5'>
 						<div className='w-160'>{postMarkup}</div>
+						<Sidebar sub={sub} />
 					</div>
 				</>
 			)}
