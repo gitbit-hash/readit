@@ -1,7 +1,9 @@
 import { Request, Response, Router } from 'express';
 import { AppDataSource } from '../data-source';
+
 import { Comment } from '../entities/Comment';
 import { Post } from '../entities/Post';
+import { Sub } from '../entities/Sub';
 import { User } from '../entities/User';
 import { Vote } from '../entities/Vote';
 
@@ -103,6 +105,27 @@ const vote = async (req: Request, res: Response) => {
 	}
 };
 
-router.post('/vote', user, auth, vote);
+const topSubs = async (_: Request, res: Response) => {
+	try {
+		const imageUrlExp = `COALESCE('${process.env.APP_URL}/images/' || s."imageUrn" ,
+		'https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y')`;
+		const subs = await AppDataSource.createQueryBuilder()
+			.select(
+				`s.title, s.name, ${imageUrlExp} as "imageUrl", count(p.id) as "postCount"`
+			)
+			.from(Sub, 's')
+			.leftJoin(Post, 'p', `s.name = p."subName"`)
+			.groupBy('s.title, s.name, "imageUrl"')
+			.orderBy(`"postCount"`, 'DESC')
+			.limit(5)
+			.execute();
 
+		return res.json(subs);
+	} catch (error) {
+		return res.status(500).json({ error: 'Something went wrong' });
+	}
+};
+
+router.post('/vote', user, auth, vote);
+router.get('/top-subs', topSubs);
 export default router;
