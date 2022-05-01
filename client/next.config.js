@@ -9,6 +9,9 @@ const nextConfig = {
 
 		return config;
 	},
+	images: {
+		domains: ['www.gravatar.com', 'localhost'],
+	},
 };
 
 module.exports = nextConfig;
