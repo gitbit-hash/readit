@@ -1,10 +1,10 @@
 import Link from 'next/link';
-import React from 'react';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
+import Axios from 'axios';
+import { useSWRConfig } from 'swr';
 
 import { Post } from '../types';
-import Axios from 'axios';
 
 interface PostCardProps {
 	post: Post;
@@ -13,15 +13,18 @@ interface PostCardProps {
 dayjs.extend(relativeTime);
 
 function PostCard({ post }: PostCardProps) {
+	const { mutate } = useSWRConfig();
+
 	const vote = async (value: number) => {
+		if (value === post.userVote) value = 0;
+
 		try {
-			const res = await Axios.post('/misc/vote', {
+			await Axios.post('/misc/vote', {
 				identifier: post.identifier,
 				slug: post.slug,
 				value,
 			});
-
-			console.log(res.data);
+			mutate('/posts');
 		} catch (error) {
 			console.log(error);
 		}
