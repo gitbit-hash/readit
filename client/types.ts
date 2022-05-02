@@ -7,6 +7,7 @@ export interface Post {
 	identifier: string;
 	slug: string;
 	subName: string;
+	sub?: Sub;
 	// Virtual fields (not exist in database)
 	url: string;
 	voteScore?: number;

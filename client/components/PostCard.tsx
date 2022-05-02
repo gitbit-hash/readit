@@ -13,7 +13,7 @@ interface PostCardProps {
 dayjs.extend(relativeTime);
 
 function PostCard({ post }: PostCardProps) {
-	const vote = async (value) => {
+	const vote = async (value: number) => {
 		try {
 			const res = await Axios.post('/misc/vote', {
 				identifier: post.identifier,

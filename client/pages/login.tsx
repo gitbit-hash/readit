@@ -1,4 +1,4 @@
-import { FormEvent, useState, ChangeEvent } from 'react';
+import { FormEvent, useState, ChangeEvent, useEffect } from 'react';
 
 import Head from 'next/head';
 import Link from 'next/link';
@@ -10,7 +10,7 @@ import InputGroup from '../components/InputGroup';
 
 import { useAuthDispatch, useAuthState } from '../context/auth';
 
-export default function Register() {
+export default function Login() {
 	const [input, setInput] = useState({
 		username: '',
 		password: '',
@@ -21,13 +21,16 @@ export default function Register() {
 	const dispatch = useAuthDispatch();
 	const { authenticated } = useAuthState();
 
-	const router = useRouter();
+	useEffect(() => {
+		if (authenticated) router.push('/');
+	}, [authenticated]);
 
-	if (authenticated) router.push('/');
+	const router = useRouter();
 
 	const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
 		const { name, value } = e.target;
 		setInput({ ...input, [name]: value });
+		setInputErrors({});
 	};
 
 	const { username, password } = input;
@@ -43,7 +46,6 @@ export default function Register() {
 
 			dispatch({ type: 'LOGIN', payload: res.data });
 
-			setInputErrors({});
 			router.back();
 		} catch (error) {
 			console.log(error.response.data.error);

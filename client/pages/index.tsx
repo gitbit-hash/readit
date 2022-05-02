@@ -40,12 +40,14 @@ export default function Home() {
 								>
 									<div className='mr-2 overflow-hidden rounded-full cursor-pointer'>
 										<Link href={`/r/${sub.name}`}>
-											<Image
-												src={sub.imageUrl}
-												alt='Sub Image'
-												width={(6 * 16) / 4}
-												height={(6 * 16) / 4}
-											/>
+											<a>
+												<Image
+													src={sub.imageUrl}
+													alt='Sub Image'
+													width={(6 * 16) / 4}
+													height={(6 * 16) / 4}
+												/>
+											</a>
 										</Link>
 									</div>
 									<Link href={`/r/${sub.name}`}>
