@@ -6,20 +6,13 @@ import { FormEvent, useEffect, useState } from 'react';
 import useSWR from 'swr';
 
 import Sidebar from '../../../components/Sidebar';
-import { useAuthState } from '../../../context/auth';
 import { Post, Sub } from '../../../types';
 
 export default function Submit() {
 	const [title, setTitle] = useState('');
 	const [body, setBody] = useState('');
 
-	// const { authenticated } = useAuthState();
-
 	const router = useRouter();
-
-	// useEffect(() => {
-	// 	if (!authenticated) router.push('/');
-	// }, []);
 
 	const { sub: subName } = router.query;
 
