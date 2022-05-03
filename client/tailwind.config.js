@@ -29,6 +29,12 @@ module.exports = {
 			container: false,
 		},
 	},
+	variants: {
+		extend: {
+			backgroundColor: ['disabled'],
+			borderColor: ['disabled'],
+		},
+	},
 	plugins: [
 		function ({ addComponents }) {
 			addComponents({
