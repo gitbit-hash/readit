@@ -45,4 +45,5 @@ export interface Comment {
 	voteScore: number;
 	createdAt: string;
 	updatedAt: string;
+	post?: Post;
 }

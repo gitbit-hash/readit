@@ -10,6 +10,7 @@ import postRoutes from './routes/posts';
 import subRoutes from './routes/subs';
 import commentRoutes from './routes/comments';
 import miscRoutes from './routes/misc';
+import userRoute from './routes/users';
 
 import { trim } from './middlewares/trim';
 
@@ -34,6 +35,7 @@ app.use('/api/posts', postRoutes);
 app.use('/api/subs', subRoutes);
 app.use('/api/posts', commentRoutes);
 app.use('/api/misc', miscRoutes);
+app.use('/api/users', userRoute);
 
 app.listen(PORT, async () => {
 	console.log(`Server is up and running at http://localhost:${PORT}`);
