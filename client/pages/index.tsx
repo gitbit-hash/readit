@@ -38,20 +38,19 @@ export default function Home() {
 									key={sub.name}
 									className='flex items-center px-4 py-2 text-xs border-b'
 								>
-									<div className='mr-2 overflow-hidden rounded-full cursor-pointer'>
-										<Link href={`/r/${sub.name}`}>
-											<a>
-												<Image
-													src={sub.imageUrl}
-													alt='Sub Image'
-													width={(6 * 16) / 4}
-													height={(6 * 16) / 4}
-												/>
-											</a>
-										</Link>
-									</div>
 									<Link href={`/r/${sub.name}`}>
-										<a className='font-bold hover:cursor-pointer'>
+										<a>
+											<Image
+												src={sub.imageUrl}
+												alt='Sub Image'
+												width={(6 * 16) / 4}
+												height={(6 * 16) / 4}
+												className='rounded-full cursor-pointer'
+											/>
+										</a>
+									</Link>
+									<Link href={`/r/${sub.name}`}>
+										<a className='ml-2 font-bold hover:cursor-pointer'>
 											/r/{sub.name}
 										</a>
 									</Link>
