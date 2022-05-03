@@ -1,4 +1,5 @@
 import Axios from 'axios';
+import { GetServerSideProps } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { FormEvent, useEffect, useState } from 'react';
@@ -12,13 +13,13 @@ export default function Submit() {
 	const [title, setTitle] = useState('');
 	const [body, setBody] = useState('');
 
-	const { authenticated } = useAuthState();
+	// const { authenticated } = useAuthState();
 
 	const router = useRouter();
 
-	useEffect(() => {
-		if (!authenticated) router.push('/');
-	}, []);
+	// useEffect(() => {
+	// 	if (!authenticated) router.push('/');
+	// }, []);
 
 	const { sub: subName } = router.query;
 
@@ -89,3 +90,17 @@ export default function Submit() {
 		</div>
 	);
 }
+
+export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
+	const cookie = req.headers.cookie;
+
+	try {
+		if (!cookie) throw new Error('Missing auth token cookie');
+
+		await Axios.get('/auth/me', { headers: { cookie } });
+
+		return { props: {} };
+	} catch (error) {
+		res.writeHead(307, { Location: '/login' }).end();
+	}
+};
