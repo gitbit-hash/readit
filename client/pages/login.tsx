@@ -67,7 +67,7 @@ export default function Login() {
 						<InputGroup
 							className='mb-2'
 							type='text'
-							placeholder='USErNAME'
+							placeholder='USERNAME'
 							value={username}
 							setValue={handleInputChange}
 							name='username'
