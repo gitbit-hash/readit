@@ -1,13 +1,23 @@
 import Axios from 'axios';
+import Image from 'next/image';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
 
 import { useAuthState, useAuthDispatch } from '../context/auth';
 
 import RedditLogo from '../public/images/reddit-logo.svg';
+import { Sub } from '../types';
 
 const Navbar: React.FC = () => {
+	const [name, setName] = useState('');
+	const [subs, setSubs] = useState<Sub[]>([]);
+	const [timer, setTimer] = useState(null);
+
 	const { authenticated, loading } = useAuthState();
 	const dispatch = useAuthDispatch();
+
+	const router = useRouter();
 
 	const logout = async () => {
 		Axios.get('/auth/logout')
@@ -16,6 +26,34 @@ const Navbar: React.FC = () => {
 				window.location.reload();
 			})
 			.catch((error) => console.log(error));
+	};
+
+	useEffect(() => {
+		if (name.trim() === '') {
+			setSubs([]);
+			return;
+		}
+
+		searchSubs();
+	}, [name]);
+
+	const searchSubs = async () => {
+		clearTimeout(timer);
+		setTimer(
+			setTimeout(async () => {
+				try {
+					const { data } = await Axios.get(`/subs/search/${name}`);
+					setSubs(data);
+				} catch (error) {
+					console.log(error);
+				}
+			}, 250)
+		);
+	};
+
+	const goToSub = (subName: string) => {
+		router.push(`/r/${subName}`);
+		setName('');
 	};
 
 	return (
@@ -32,12 +70,35 @@ const Navbar: React.FC = () => {
 				</span>
 			</div>
 			{/* Search Input */}
-			<div className='flex items-center mx-auto border rounded group w-160 hover:border-blue-400 bg-gray-50 hover:bg-white'>
+			<div className='relative flex items-center mx-auto border rounded group w-160 hover:border-blue-400 bg-gray-50 hover:bg-white'>
 				<input
 					type='text'
 					className='order-2 w-full py-1 pr-3 bg-transparent rounded peer focus:outline-none outline-1 group-hover:bg-white focus:bg-white'
 					placeholder='Search Readit'
+					value={name}
+					onChange={(e) => setName(e.target.value)}
 				/>
+				<div className='absolute left-0 right-0 bg-white top-full'>
+					{subs?.map((sub) => (
+						<div
+							key={sub.name}
+							className='flex items-center px-4 py-3 cursor-pointer hover:bg-gray-200'
+							onClick={() => goToSub(sub.name)}
+						>
+							<Image
+								className='rounded-full'
+								src={sub.imageUrl}
+								alt='Sub'
+								width={(8 * 16) / 4}
+								height={(8 * 16) / 4}
+							/>
+							<div className='ml-4 text-sm'>
+								<p className='font-medium'>{sub.name}</p>
+								<p className='text-gray-500'>{sub.title}</p>
+							</div>
+						</div>
+					))}
+				</div>
 				<div className='order-1 rounded group-hover:bg-white peer-focus:bg-white'>
 					<i className='ml-3 mr-2 text-2xl text-gray-400 fa-solid fa-magnifying-glass' />
 				</div>

@@ -4,12 +4,15 @@ import Link from 'next/link';
 import useSWR from 'swr';
 
 import PostCard from '../components/PostCard';
+import { useAuthState } from '../context/auth';
 
 import { Post, Sub } from '../types';
 
 export default function Home() {
-	const { data: posts } = useSWR('/posts');
-	const { data: topSubs } = useSWR('/misc/top-subs');
+	const { data: posts } = useSWR<Post[]>('/posts');
+	const { data: topSubs } = useSWR<Sub[]>('/misc/top-subs');
+
+	const { authenticated } = useAuthState();
 
 	return (
 		<>
@@ -33,7 +36,7 @@ export default function Home() {
 							</p>
 						</div>
 						<div>
-							{topSubs?.map((sub: Sub) => (
+							{topSubs?.map((sub) => (
 								<div
 									key={sub.name}
 									className='flex items-center px-4 py-2 text-xs border-b'
@@ -58,6 +61,15 @@ export default function Home() {
 								</div>
 							))}
 						</div>
+						{authenticated && (
+							<div className='p-4 border-t-2'>
+								<Link href='/subs/create'>
+									<a className='w-full px-2 py-1 rounded-sm blue custom-button'>
+										Create Community
+									</a>
+								</Link>
+							</div>
+						)}
 					</div>
 				</div>
 			</div>
