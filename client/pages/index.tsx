@@ -1,7 +1,9 @@
 import Head from 'next/head';
 import Image from 'next/image';
 import Link from 'next/link';
-import useSWR from 'swr';
+import { useEffect, useState } from 'react';
+import useSWR, { useSWRConfig } from 'swr';
+import useSWRInfinite from 'swr/infinite';
 
 import PostCard from '../components/PostCard';
 import { useAuthState } from '../context/auth';
@@ -9,10 +11,58 @@ import { useAuthState } from '../context/auth';
 import { Post, Sub } from '../types';
 
 export default function Home() {
-	const { data: posts } = useSWR<Post[]>('/posts');
+	const [observedPost, setObservedPost] = useState('');
+
+	// const { data: posts } = useSWR<Post[]>('/posts');
 	const { data: topSubs } = useSWR<Sub[]>('/misc/top-subs');
 
+	// Get the fetcher from the global SWRConfig and pass it to useSWRInfinite
+	const { fetcher } = useSWRConfig();
+
 	const { authenticated } = useAuthState();
+
+	const {
+		data,
+		error,
+		isValidating,
+		mutate,
+		size: page,
+		setSize: setPage,
+	} = useSWRInfinite((pageIndex) => `/posts?page=${pageIndex}`, fetcher, {
+		// Don't revalidate the first page when loading more posts
+		revalidateFirstPage: false,
+	});
+
+	const isInitialLoading = !data && !error;
+
+	const posts: Post[] = data ? [].concat(...data) : [];
+
+	useEffect(() => {
+		if (!posts || posts.length === 0) return;
+		console.log(page);
+		const id = posts[posts.length - 1].identifier;
+
+		if (id !== observedPost) {
+			setObservedPost(id);
+			observeElement(document.getElementById(id));
+		}
+	}, [posts]);
+
+	const observeElement = (element: HTMLElement) => {
+		if (!element) return;
+
+		const observer = new IntersectionObserver(
+			(entries) => {
+				if (entries[0].isIntersecting) {
+					setPage(page + 1);
+					observer.unobserve(element);
+				}
+			},
+			{ threshold: 1 }
+		);
+
+		observer.observe(element);
+	};
 
 	return (
 		<>
@@ -23,9 +73,15 @@ export default function Home() {
 			<div className='container flex pt-4'>
 				{/* Posts feed */}
 				<div className='w-full px-4 md:w-160 md:p-0'>
-					{posts?.map((post: Post) => (
+					{isInitialLoading && (
+						<p className='text-lg text-center'>Loading...</p>
+					)}
+					{posts?.map((post) => (
 						<PostCard post={post} key={post.identifier} />
 					))}
+					{isValidating && posts.length > 0 && (
+						<p className='text-lg text-center'>Loading More...</p>
+					)}
 				</div>
 				{/* Sidebar */}
 				<div className='hidden ml-6 md:block w-80'>
