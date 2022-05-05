@@ -18,6 +18,9 @@ function PostCard({ post, mutate: mutatePost }: PostCardProps) {
 	const { authenticated } = useAuthState();
 
 	const router = useRouter();
+
+	const isInSubPage = router.pathname === '/r/[sub]';
+
 	const vote = async (value: number) => {
 		if (!authenticated) router.push('/login');
 
@@ -72,20 +75,24 @@ function PostCard({ post, mutate: mutatePost }: PostCardProps) {
 			{/* Post data section */}
 			<div className='w-full p-2'>
 				<div className='flex items-center'>
-					<Link href={`/r/${post.subName}`}>
-						<img
-							className='w-6 h-6 mr-1 rounded-full cursor-pointer'
-							src='https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y'
-							alt='gravatar'
-						/>
-					</Link>
-					<Link href={`/r/${post.subName}`}>
-						<a className='text-xs font-bold hover:underline'>
-							/r/{post.subName}
-						</a>
-					</Link>
+					{!isInSubPage && (
+						<>
+							<Link href={`/r/${post.subName}`}>
+								<img
+									className='w-6 h-6 mr-1 rounded-full cursor-pointer'
+									src={post.sub.imageUrl}
+									alt='gravatar'
+								/>
+							</Link>
+							<Link href={`/r/${post.subName}`}>
+								<a className='text-xs font-bold hover:underline'>
+									/r/{post.subName}
+								</a>
+							</Link>
+							<span className='mx-1 text-xs text-gray-500'>•</span> Posted by
+						</>
+					)}
 					<p className='text-xs text-gray-500'>
-						<span className='mx-1'>•</span> Posted by
 						<Link href={`/u/${post.username}`}>
 							<a className='mx-1 hover:underline'>/u/{post.username}</a>
 						</Link>
