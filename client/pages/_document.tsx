@@ -17,8 +17,20 @@ class MyDocument extends Document {
 		return (
 			<Html>
 				<Head>
-					<title>Readit</title>
+					{/* <title>Readit</title> */}
 					<link rel='icon' href='/images/readit.svg' type='image/svg+xml' />
+					<meta property='og:site_name' content='readit' />
+					{/* <meta property="twitter:site" content="@readit" /> */}
+					<meta property='twitter:card' content='summary' />
+					<meta property='og:type' content='website' />
+					<meta
+						property='twitter:image'
+						content={`${process.env.NEXT_PUBLIC_CLIENT_BASE_URL}/images/readit.svg`}
+					/>
+					<meta
+						property='og:image'
+						content={`${process.env.NEXT_PUBLIC_CLIENT_BASE_URL}/images/readit.svg`}
+					/>
 					<link rel='preconnect' href='https://fonts.googleapis.com' />
 					<link
 						rel='preconnect'

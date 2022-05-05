@@ -1,4 +1,4 @@
-import { FormEvent, useState } from 'react';
+import { FormEvent, useEffect, useState } from 'react';
 import Axios from 'axios';
 import Head from 'next/head';
 import Image from 'next/image';
@@ -17,6 +17,7 @@ dayjs.extend(relativeTime);
 export default function PostPage() {
 	// Local state
 	const [newComment, setNewComment] = useState('');
+	const [description, setDescription] = useState('');
 
 	// Global state
 	const { authenticated, user } = useAuthState();
@@ -36,6 +37,16 @@ export default function PostPage() {
 	} = useSWR<Post>(identifier && slug ? `/posts/${identifier}/${slug}` : null);
 
 	if (error) router.push('/');
+
+	useEffect(() => {
+		if (!post) return;
+
+		let desc = post.body || post.title;
+
+		desc = desc.substring(0, 158).concat('..');
+
+		setDescription(desc);
+	}, [post]);
 
 	const vote = async (value: number, comment?: Comment) => {
 		if (!authenticated) router.push('/login');
@@ -84,6 +95,11 @@ export default function PostPage() {
 		<>
 			<Head>
 				<title>{post?.title}</title>
+				<meta name='description' content={description}></meta>
+				<meta property='og:description' content={description} />
+				<meta property='og:title' content={post?.title} />
+				<meta property='twitter:description' content={description} />
+				<meta property='twitter:title' content={post?.title} />
 			</Head>
 			<Link href={`/r/${sub}`}>
 				<a className='flex items-center w-full h-20 p-8 bg-blue-500'>
