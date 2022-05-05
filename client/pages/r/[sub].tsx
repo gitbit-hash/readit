@@ -74,7 +74,7 @@ export default function SubPage() {
 		);
 	} else {
 		postMarkup = sub.posts.map((post) => (
-			<PostCard key={post.identifier} post={post} />
+			<PostCard key={post.identifier} post={post} mutate={mutate} />
 		));
 	}
 

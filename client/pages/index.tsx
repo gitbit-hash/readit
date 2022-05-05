@@ -39,7 +39,7 @@ export default function Home() {
 
 	useEffect(() => {
 		if (!posts || posts.length === 0) return;
-		console.log(page);
+
 		const id = posts[posts.length - 1].identifier;
 
 		if (id !== observedPost) {
@@ -77,7 +77,7 @@ export default function Home() {
 						<p className='text-lg text-center'>Loading...</p>
 					)}
 					{posts?.map((post) => (
-						<PostCard post={post} key={post.identifier} />
+						<PostCard post={post} key={post.identifier} mutate={mutate} />
 					))}
 					{isValidating && posts.length > 0 && (
 						<p className='text-lg text-center'>Loading More...</p>

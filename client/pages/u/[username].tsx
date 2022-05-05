@@ -11,11 +11,11 @@ export default function User() {
 	const router = useRouter();
 	const { username } = router.query;
 
-	const { data, error } = useSWR<any>(username ? `/users/${username}` : null);
+	const { data, error, mutate } = useSWR<any>(
+		username ? `/users/${username}` : null
+	);
 
 	if (error) router.push('/');
-
-	if (data) console.log(data);
 
 	return (
 		<>
@@ -28,7 +28,9 @@ export default function User() {
 						{data.submissions.map((submission: any) => {
 							if (submission.type === 'Post') {
 								const post: Post = submission;
-								return <PostCard key={post.identifier} post={post} />;
+								return (
+									<PostCard key={post.identifier} post={post} mutate={mutate} />
+								);
 							} else {
 								const comment: Comment = submission;
 								return (

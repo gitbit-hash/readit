@@ -73,6 +73,7 @@ export default function PostPage() {
 
 			setNewComment('');
 
+			mutatePost(post);
 			mutateComment(comments);
 		} catch (error) {
 			console.log(error);

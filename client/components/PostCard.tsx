@@ -2,20 +2,25 @@ import Link from 'next/link';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import Axios from 'axios';
-import { useSWRConfig } from 'swr';
 
 import { Post } from '../types';
+import { useAuthState } from '../context/auth';
+import { useRouter } from 'next/router';
 
 interface PostCardProps {
 	post: Post;
+	mutate?: Function;
 }
 
 dayjs.extend(relativeTime);
 
-function PostCard({ post }: PostCardProps) {
-	const { mutate } = useSWRConfig();
+function PostCard({ post, mutate: mutatePost }: PostCardProps) {
+	const { authenticated } = useAuthState();
 
+	const router = useRouter();
 	const vote = async (value: number) => {
+		if (!authenticated) router.push('/login');
+
 		if (value === post.userVote) value = 0;
 
 		try {
@@ -24,7 +29,8 @@ function PostCard({ post }: PostCardProps) {
 				slug: post.slug,
 				value,
 			});
-			mutate('/posts');
+
+			mutatePost();
 		} catch (error) {
 			console.log(error);
 		}
